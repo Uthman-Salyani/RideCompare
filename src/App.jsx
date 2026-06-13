@@ -1,35 +1,46 @@
 import { useState } from 'react'
 import SearchPage from './pages/SearchPage.jsx'
-import ResultPage from './pages/ResultPage.jsx'
+import ResultsPage from './pages/ResultsPage.jsx'
 import BookingPage from './pages/BookingPage.jsx'
 
+/*
+  App.jsx is the root component. It controls which "page" is currently visible
+  by tracking a 'screen' state variable.
+
+  The three screens are:
+    1. 'search'  — user enters pickup and dropoff
+    2. 'results' — comparison cards are shown
+    3. 'booking' — simulated booking confirmation
+
+  We also store the search data and the chosen ride here so we can pass
+  them down to the relevant pages as props.
+*/
+
 export default function App() {
-  // Which screen is currently being shown — defaults to search
+  // Which screen is currently showing
   const [screen, setScreen] = useState('search')
 
-  // The route data from the search form (pickup, dropoff, distance, duration)
-  const [routeData, setRoute] = useState(null)
+  // The route data from the search (pickup, dropoff, distance, duration)
+  const [routeData, setRouteData] = useState(null)
 
   // The ride option the user picked from the results
   const [chosenRide, setChosenRide] = useState(null)
 
   // Called when the user submits the search form
   function handleSearch(data) {
-    setRoute(data)
+    setRouteData(data)
     setScreen('results')
   }
 
   // Called when the user clicks "Book" on a ride card
-  // Saves the chosen ride and moves to the booking screen
   function handleBook(ride) {
     setChosenRide(ride)
     setScreen('booking')
   }
 
-  // Called when the user wants to start over
-  // Clears everything and returns to the search screen
+  // Called when the user wants to go back to search
   function handleReset() {
-    setRoute(null)
+    setRouteData(null)
     setChosenRide(null)
     setScreen('search')
   }
@@ -44,7 +55,7 @@ export default function App() {
           <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
           <span className="font-semibold text-gray-900 text-lg">RideCompare</span>
         </div>
-        {/* Only show the "New search" button when not on the search screen */}
+        {/* Only show the "New search" button when not on search screen */}
         {screen !== 'search' && (
           <button
             onClick={handleReset}
@@ -55,13 +66,13 @@ export default function App() {
         )}
       </nav>
 
-      {/* max-w-7xl gives the landing page enough room to breathe */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      {/* Render the correct page based on current screen */}
+      <main className="max-w-2xl mx-auto px-4 py-8">
         {screen === 'search' && (
           <SearchPage onSearch={handleSearch} />
         )}
         {screen === 'results' && (
-          <ResultPage routeData={routeData} onBook={handleBook} />
+          <ResultsPage routeData={routeData} onBook={handleBook} />
         )}
         {screen === 'booking' && (
           <BookingPage ride={chosenRide} routeData={routeData} onReset={handleReset} />

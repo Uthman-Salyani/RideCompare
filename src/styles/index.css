@@ -1,23 +1,38 @@
-/*Loads Tailwind, sets font, makes buttons smooth, and for shortcut*/
-/*css directives*/
-@import "tailwindcss";
+/*
+  index.css — Global styles
+  
+  Tailwind's three directives below inject all of Tailwind's
+  base reset, component classes, and utility classes.
+  You don't write much here — Tailwind handles it.
+  Add any custom global styles underneath.
+*/
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/*Global Default Layouts*/
-body{
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: #111827;
+/*
+  Custom base styles
+  These apply to the whole app without needing a class.
+*/
+body {
+  font-family: 'Inter', sans-serif;
+  color: #111827; /* gray-900 */
 }
-button{
-    transition: all 0.2s ease;
+
+/*
+  Smooth transitions for interactive elements
+*/
+button {
+  transition: all 0.15s ease;
 }
-/*Custom Global Tailwind Shortcut*/
-/*For every rider card - will use className="card-hover"*/
-@layer components{
-    .card-hover{
-        @apply transition-shadow duration-200 hover:shadow-md;
-    }
+
+/*
+  Card hover lift effect — reusable via @apply
+  Usage: add class="card-hover" to any card div
+*/
+@layer components {
+  .card-hover {
+    @apply transition-shadow duration-200 hover:shadow-md;
+  }
 }

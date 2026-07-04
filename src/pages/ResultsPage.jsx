@@ -11,7 +11,15 @@ import RouteMap from '../components/RouteMap.jsx'
     onBook(ride) — called when user picks a ride, passes chosen ride up to App.jsx
 */
 export default function ResultsPage({ routeData, onBook }) {
-  const { pickup, dropoff, distance, duration, pickupCoords, dropoffCoords } = routeData
+  const {
+    pickup,
+    dropoff,
+    distance,
+    duration,
+    pickupCoords,
+    dropoffCoords,
+    selectedVehicleType,
+  } = routeData
 
   // Sort preference: 'price' | 'eta' | 'capacity'
   const [sortBy, setSortBy] = useState('price')
@@ -33,6 +41,14 @@ export default function ResultsPage({ routeData, onBook }) {
     return 0
   })
 
+  const filtered = sorted.filter(ride => {
+    if (selectedVehicleType) {
+      return ride.vehicleType === selectedVehicleType
+    }
+
+    return true
+  })
+
   return (
     <div className="flex flex-col gap-6">
 
@@ -44,13 +60,18 @@ export default function ResultsPage({ routeData, onBook }) {
         <div className="flex gap-4 text-sm text-gray-500">
           <span>📍 {distance} km</span>
           <span>⏱ ~{duration} min in traffic</span>
+          {selectedVehicleType && (
+            <span>
+              🎯 {selectedVehicleType.charAt(0).toUpperCase() + selectedVehicleType.slice(1)} only
+            </span>
+          )}
         </div>
       </div>
 
       {/* Map preview — only shown if we have real coordinates */}
       {pickupCoords && dropoffCoords && (
         <RouteMap
-          pickupCoords={pickupCoords}
+          pickupCoords={pickupCoords} /* Show pickup and dropoff markers on the map */
           dropoffCoords={dropoffCoords}
           pickupLabel={pickup}
           dropoffLabel={dropoff}
@@ -60,9 +81,10 @@ export default function ResultsPage({ routeData, onBook }) {
       {/* Sort controls */}
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-400 uppercase tracking-wide mr-1">Sort by</span>
+        {/* Sort buttons for price, eta, and capacity */}
         {['price', 'eta', 'capacity'].map(opt => (
           <button
-            key={opt}
+            key={opt} /* When clicked, update the sortBy state to the selected option */
             onClick={() => setSortBy(opt)}
             className={`text-sm px-3 py-1.5 rounded-lg border transition
               ${sortBy === opt
@@ -78,13 +100,22 @@ export default function ResultsPage({ routeData, onBook }) {
 
       {/* Ride cards */}
       <div className="flex flex-col gap-3">
-        {sorted.map(ride => (
-          <RideCard
-            key={ride.id}
-            ride={ride}
-            onBook={() => onBook(ride)}
-          />
-        ))}
+        {/* If there are filtered rides, map over them and render RideCard components. Otherwise, show a message indicating no rides match the selected type. */}
+        {filtered.length > 0 ? (
+          filtered.map(ride => (
+            <RideCard
+              key={ride.id}
+              ride={ride} // Pass the ride data to the RideCard component
+              pickup={pickup} // Pass the pickup location to the RideCard component
+              dropoff={dropoff} // Pass the dropoff location to the RideCard component
+              onBook={() => onBook(ride)}
+            />
+          ))
+        ) : (
+          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-6 text-sm text-gray-500">
+            No ride matches the selected ride type. Go back and choose a different type or switch to All types.
+          </div>
+        )}
       </div>
 
     </div>

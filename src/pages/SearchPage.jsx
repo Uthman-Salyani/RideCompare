@@ -1,17 +1,23 @@
 import { useState } from 'react'
 import { getMockRoute } from '../utils/fareUtils.js'
+import { rideTypes, landmarks } from '../data/providers.js'
 
 /*
-  SearchPage.jsx — The landing screen.
-
-  Props:
-    onSearch(routeData) — called when user submits valid pickup + dropoff.
-                          Passes route data up to App.jsx.
+  SearchPage.jsx
+  Focused route form shown after the landing page.
+  onSearch(routeData) is called when the user submits valid pickup + dropoff.
 */
 export default function SearchPage({ onSearch }) {
-  const [pickup,  setPickup]  = useState('')
+  const [pickup, setPickup] = useState('')
   const [dropoff, setDropoff] = useState('')
-  const [error,   setError]   = useState('')
+  const [selectedVehicleType, setSelectedVehicleType] = useState('')
+  const [error, setError] = useState('')
+
+  const rideTypeOptions = Array.from(new Set(rideTypes.map(rideType => rideType.vehicleType)))
+
+  function isValidLocation(location) {
+    return Boolean(landmarks[location.trim().toLowerCase()])
+  }
 
   // Swap the two input values
   function swapLocations() {
@@ -21,7 +27,7 @@ export default function SearchPage({ onSearch }) {
 
   // Called when the form is submitted
   function handleSubmit(e) {
-    e.preventDefault() // prevent page reload
+    e.preventDefault()
 
     // Basic validation
     if (!pickup.trim() || !dropoff.trim()) {
@@ -32,94 +38,101 @@ export default function SearchPage({ onSearch }) {
       setError('Pickup and dropoff cannot be the same location.')
       return
     }
+    if (!isValidLocation(pickup) || !isValidLocation(dropoff)) {
+      setError('Please enter a supported location such as Westlands, CBD, Kilimani, Karen, or Parklands.')
+      return
+    }
 
-    setError('') // clear any previous error
-
+    setError('')
     // Calculate mock route data and pass it up to App.jsx
     const routeData = getMockRoute(pickup, dropoff)
-    onSearch({ pickup, dropoff, ...routeData })
+    onSearch({
+      pickup,
+      dropoff,
+      selectedVehicleType,
+      ...routeData,
+    })
   }
 
   return (
-    <div className="flex flex-col items-center">
-
-      {/* Hero heading */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Compare rides in Nairobi
-        </h1>
-        <p className="text-gray-500 text-sm">
-          See fares from Uber, Bolt, Little, and Faras — side by side.
-        </p>
+    /* Main search form section with styling and layout */
+    <section className="mx-auto max-w-xl rounded-[2rem] border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/70 sm:p-6">
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-black text-slate-950 sm:text-2xl">Start comparing</h2>
+          <p className="mt-1 text-xs text-slate-500 sm:text-sm">Type your route and the app will calculate a fresh estimate.</p>
+        </div>
+        <div className="rounded-2xl bg-emerald-50 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-700 whitespace-nowrap sm:text-xs">
+          No signup needed
+        </div>
       </div>
-
-      {/* Search card */}
-      <div className="w-full bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
-          {/* Input group with swap button */}
-          <div className="relative flex flex-col gap-2">
-
-            {/* Pickup input */}
-            <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
-              {/* Green dot = pickup */}
-              <span className="w-3 h-3 rounded-full bg-emerald-500 shrink-0" />
-              <input
-                type="text"
-                placeholder="Pickup location (e.g. Westlands)"
-                value={pickup}
-                onChange={e => setPickup(e.target.value)}
-                className="flex-1 bg-transparent text-sm text-gray-900 outline-none placeholder-gray-400"
-              />
-            </div>
-
-            {/* Swap button — sits between the two inputs */}
-            <button
-              type="button"
-              onClick={swapLocations}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white border border-gray-200
-                         rounded-full w-8 h-8 flex items-center justify-center text-gray-400
-                         hover:text-gray-700 hover:border-gray-400 z-10"
-              aria-label="Swap pickup and dropoff"
-            >
-              ⇅
-            </button>
-
-            {/* Dropoff input */}
-            <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
-              {/* Red dot = dropoff */}
-              <span className="w-3 h-3 rounded-full bg-red-400 shrink-0" />
-              <input
-                type="text"
-                placeholder="Dropoff location (e.g. CBD)"
-                value={dropoff}
-                onChange={e => setDropoff(e.target.value)}
-                className="flex-1 bg-transparent text-sm text-gray-900 outline-none placeholder-gray-400"
-              />
-            </div>
+{/* Form for entering pickup and dropoff locations, selecting ride type, and submitting the search */}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <div className="relative flex flex-col gap-2">
+          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 shadow-sm">
+            <span className="h-3 w-3 shrink-0 rounded-full bg-emerald-500" />
+            <input
+              type="text"
+              placeholder="Pickup location (e.g. Westlands)"
+              value={pickup}
+              onChange={e => setPickup(e.target.value)}
+              className="flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+            />
           </div>
-
-          {/* Error message */}
-          {error && (
-            <p className="text-sm text-red-500">{error}</p>
-          )}
-
-          {/* Submit button */}
           <button
-            type="submit"
-            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium
-                       rounded-xl py-3 text-sm transition"
+            type="button"
+            onClick={swapLocations}
+            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-semibold text-slate-500 shadow-sm transition hover:border-slate-300 hover:text-slate-900 sm:text-xs"
+            aria-label="Swap pickup and dropoff"
           >
-            Compare rides →
+            Swap
           </button>
-        </form>
+          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 shadow-sm">
+            <span className="h-3 w-3 shrink-0 rounded-full bg-rose-400" />
+            <input
+              type="text"
+              placeholder="Dropoff location (e.g. CBD)"
+              value={dropoff}
+              onChange={e => setDropoff(e.target.value)}
+              className="flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+            />
+          </div>
+        </div>
 
-        {/* Hint: list of known landmarks */}
-        <p className="text-xs text-gray-400 mt-4 text-center">
-          Try: Westlands, CBD, Kilimani, Karen, Eastleigh, Lavington, Upperhill, Parklands
-        </p>
-      </div>
+        <div className="grid gap-3 sm:grid-cols-1">
+          <label className="flex flex-col gap-1.5 text-sm font-medium text-slate-700">
+            Ride type
+            <select
+              value={selectedVehicleType}
+              onChange={e => setSelectedVehicleType(e.target.value)}
+              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+            >
+              <option value="">All types</option>
+              {rideTypeOptions.map(vehicleType => (
+                <option key={vehicleType} value={vehicleType}>
+                  {vehicleType.charAt(0).toUpperCase() + vehicleType.slice(1)}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
-    </div>
+        {error && (
+          <p className="text-xs font-medium text-rose-500 sm:text-sm">{error}</p>
+        )}
+
+        <button
+          type="submit"
+          className="w-full rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+        >
+          Compare rides
+        </button>
+      </form>
+
+      <p className="mt-3 text-center text-[11px] text-slate-500 sm:text-xs">
+        Try Westlands, CBD, Kilimani, Karen, Eastleigh, Lavington, Upperhill, Parklands etc.
+      </p>
+    </section>
   )
 }
+

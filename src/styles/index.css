@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap');
+
 /*
   index.css — Global styles
   
@@ -16,8 +18,13 @@
   These apply to the whole app without needing a class.
 */
 body {
-  font-family: 'Inter', sans-serif;
-  color: #111827; /* gray-900 */
+  min-height: 100vh;
+  font-family: 'Manrope', sans-serif;
+  color: #0f172a;
+  background:
+    radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 22%),
+    #f8fafc;
 }
 
 /*
@@ -25,6 +32,10 @@ body {
 */
 button {
   transition: all 0.15s ease;
+}
+
+input {
+  font: inherit;
 }
 
 /*

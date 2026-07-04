@@ -22,6 +22,7 @@ import L from 'leaflet'
   Vite changes the asset paths that Leaflet expects internally.
 */
 delete L.Icon.Default.prototype._getIconUrl
+/* Use CDN-hosted marker icons instead of local assets */
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
   iconUrl:       'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
@@ -51,9 +52,13 @@ export default function RouteMap({ pickupCoords, dropoffCoords, pickupLabel, dro
     This gives the DOM time to fully paint the container div first.
   */
   const [ready, setReady] = useState(false)
-
+/* After the component mounts, set `ready` to true to render the map. */
   useEffect(() => {
-    setReady(true)
+    const timer = window.setTimeout(() => {
+      setReady(true)
+    }, 0)
+/* Cleanup the timer if the component unmounts before the timeout fires. */
+    return () => window.clearTimeout(timer)
   }, [])
 
   // Centre the map between the two points

@@ -42,7 +42,7 @@ export function getMockRoute(pickup, dropoff) {
   // Normalise to lowercase so "Westlands" matches "westlands"
   const fromKey = pickup.trim().toLowerCase()
   const toKey   = dropoff.trim().toLowerCase()
-
+// Look up coordinates in landmarks data
   const pickupCoords  = landmarks[fromKey]  || null
   const dropoffCoords = landmarks[toKey]    || null
 
@@ -58,8 +58,8 @@ export function getMockRoute(pickup, dropoff) {
     distance = parseFloat((Math.random() * 23 + 2).toFixed(1))
   }
 
-  // Rough Nairobi estimate: ~3.5 minutes per km accounting for traffic
-  const duration = Math.round(distance * 3.5)
+  // Rough Nairobi estimate: slightly faster average travel time after traffic smoothing
+  const duration = Math.max(5, Math.round(distance * 3.5))
 
   return { distance, duration, pickupCoords, dropoffCoords }
 }

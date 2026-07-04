@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { mockDrivers } from '../data/providers.js'
+import { useState, useEffect } from 'react' // React hooks for state and side effects
+import { mockDrivers } from '../data/providers.js' // Mock driver data for booking confirmation screen
 
 /*
   BookingPage.jsx — Simulates a booking confirmation after the user selects a ride.
@@ -18,7 +18,7 @@ export default function BookingPage({ ride, routeData, onReset }) {
   const [status, setStatus] = useState('loading')
 
   // Randomly pick a driver from the mock list
-  const [driver] = useState(
+  const [driver] = useState( 
     () => mockDrivers[Math.floor(Math.random() * mockDrivers.length)]
   )
 
@@ -82,6 +82,7 @@ export default function BookingPage({ ride, routeData, onReset }) {
           {/* Avatar initials */}
           <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center
                           text-lg font-semibold text-gray-700">
+            {/* Get the initials of the driver's name. */}
             {driver.name.split(' ').map(n => n[0]).join('')}
           </div>
           <div>
@@ -112,11 +113,11 @@ export default function BookingPage({ ride, routeData, onReset }) {
         <div className="flex flex-col gap-1 text-sm text-gray-600">
           <div className="flex justify-between">
             <span className="text-gray-400">From</span>
-            <span>{routeData.pickup}</span>
+            <span>{routeData.pickup}</span> {/* Show pickup location */}
           </div>
           <div className="flex justify-between">
             <span className="text-gray-400">To</span>
-            <span>{routeData.dropoff}</span>
+            <span>{routeData.dropoff}</span> {/* Show dropoff location */}
           </div>
           <div className="flex justify-between">
             <span className="text-gray-400">Fare estimate</span>

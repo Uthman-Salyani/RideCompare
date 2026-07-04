@@ -32,8 +32,8 @@ export default function RideCard({ ride, onBook }) {
           {/* Best value badge */}
           {ride.bestValue && (
             <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
-              Best value
-            </span>
+              Best value 
+            </span> 
           )}
 
           {/* Fastest ETA badge */}
@@ -58,7 +58,7 @@ export default function RideCard({ ride, onBook }) {
           KES {ride.fare.toLocaleString()}
         </span>
         <button
-          onClick={onBook}
+          onClick={onBook} /* Call the onBook() callback when clicked */
           className={`text-xs px-4 py-1.5 rounded-lg font-medium transition
             ${ride.bestValue
               ? 'bg-emerald-500 hover:bg-emerald-600 text-white'

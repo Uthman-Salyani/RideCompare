@@ -1,6 +1,6 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+import React from 'react' // Import the React library
+import ReactDOM from 'react-dom/client' // Import the ReactDOM library for rendering React components
+import App from './App.jsx' //  Import the main App component from the local file
 
 // Import our global CSS (Tailwind directives live here)
 import './styles/index.css'

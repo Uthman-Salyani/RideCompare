@@ -85,7 +85,7 @@ export default function ResultsPage({ routeData, onBook }) {
         {['price', 'eta', 'capacity'].map(opt => (
           <button
             key={opt} /* When clicked, update the sortBy state to the selected option */
-            onClick={() => setSortBy(opt)}
+            onClick={() => setSortBy(opt)} /* Update the sortBy state when a button is clicked */
             className={`text-sm px-3 py-1.5 rounded-lg border transition
               ${sortBy === opt
                 ? 'bg-gray-900 text-white border-gray-900'
@@ -108,7 +108,7 @@ export default function ResultsPage({ routeData, onBook }) {
               ride={ride} // Pass the ride data to the RideCard component
               pickup={pickup} // Pass the pickup location to the RideCard component
               dropoff={dropoff} // Pass the dropoff location to the RideCard component
-              onBook={() => onBook(ride)}
+              onBook={() => onBook(ride)} /* When the "Book" button is clicked, call the onBook() callback with the selected ride */
             />
           ))
         ) : (

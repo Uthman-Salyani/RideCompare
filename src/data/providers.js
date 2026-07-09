@@ -228,6 +228,7 @@ export const rideTypes = [
 
 //landmark coordinates
 export const landmarks = {
+  // Lat, Long coordinates
   'westlands':      [-1.2676, 36.8123],
   'cbd':            [-1.2833, 36.8172],
   'kilimani':       [-1.2921, 36.7862],

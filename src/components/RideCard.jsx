@@ -7,6 +7,7 @@
 */
 export default function RideCard({ ride, onBook }) {
   return (
+    /* Card container with conditional styling for best value rides */
     <div
       className={`bg-white border rounded-2xl p-4 flex items-center gap-4 card-hover
         ${ride.bestValue ? 'border-emerald-400 border-l-4' : 'border-gray-200'}`}
@@ -55,7 +56,7 @@ export default function RideCard({ ride, onBook }) {
       {/* Right section: fare + book button */}
       <div className="flex flex-col items-end gap-2 shrink-0">
         <span className="text-base font-bold text-gray-900">
-          KES {ride.fare.toLocaleString()}
+          KES {ride.fare.toLocaleString()} {/* Fare amount - toLocaleString makes it comma-separated in terms of thousands */}
         </span>
         <button
           onClick={onBook} /* Call the onBook() callback when clicked */
@@ -63,7 +64,7 @@ export default function RideCard({ ride, onBook }) {
             ${ride.bestValue
               ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
               : 'border border-gray-200 text-gray-700 hover:bg-gray-50'
-            }`}
+            }`} /* ? 'bg-emerald-500' is a conditional class for the best value ride */
         >
           Book
         </button>

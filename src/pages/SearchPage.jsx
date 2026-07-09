@@ -71,6 +71,7 @@ export default function SearchPage({ onSearch }) {
         <div className="relative flex flex-col gap-2">
           <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 shadow-sm">
             <span className="h-3 w-3 shrink-0 rounded-full bg-emerald-500" />
+            
             <input
               type="text"
               placeholder="Pickup location (e.g. Westlands)"
@@ -83,7 +84,7 @@ export default function SearchPage({ onSearch }) {
             type="button"
             onClick={swapLocations}
             className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-semibold text-slate-500 shadow-sm transition hover:border-slate-300 hover:text-slate-900 sm:text-xs"
-            aria-label="Swap pickup and dropoff"
+            aria-label="Swap pickup and dropoff" // Add an accessible label for screen readers
           >
             Swap
           </button>
@@ -93,7 +94,7 @@ export default function SearchPage({ onSearch }) {
               type="text"
               placeholder="Dropoff location (e.g. CBD)"
               value={dropoff}
-              onChange={e => setDropoff(e.target.value)}
+              onChange={e => setDropoff(e.target.value)} // Update the dropoff state when the input value changes
               className="flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
             />
           </div>
@@ -104,11 +105,13 @@ export default function SearchPage({ onSearch }) {
             Ride type
             <select
               value={selectedVehicleType}
-              onChange={e => setSelectedVehicleType(e.target.value)}
+              onChange={e => setSelectedVehicleType(e.target.value)} // Update the selectedVehicleType state when the dropdown value changes
               className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
             >
               <option value="">All types</option>
+              {/* Map over the rideTypeOptions array to create an option for each vehicle type */}
               {rideTypeOptions.map(vehicleType => (
+                
                 <option key={vehicleType} value={vehicleType}>
                   {vehicleType.charAt(0).toUpperCase() + vehicleType.slice(1)}
                 </option>

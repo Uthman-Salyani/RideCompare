@@ -33,9 +33,10 @@ export default function BookingPage({ ride, routeData, onReset }) {
 
   // Countdown ticker — runs every second once confirmed
   useEffect(() => {
-    if (status !== 'confirmed') return
-    if (seconds <= 0) return
+    if (status !== 'confirmed') return // only start countdown after confirmation
+    if (seconds <= 0) return // stop countdown if it reaches 0
 
+    // Start a 1-second interval to decrement the countdown
     const tick = setInterval(() => {
       setSeconds(prev => prev - 1)
     }, 1000)
@@ -47,6 +48,7 @@ export default function BookingPage({ ride, routeData, onReset }) {
   function formatTime(secs) {
     const m = Math.floor(secs / 60)
     const s = secs % 60
+    // Pad seconds with leading zero if needed
     return `${m}:${s.toString().padStart(2, '0')}`
   }
 
@@ -85,10 +87,12 @@ export default function BookingPage({ ride, routeData, onReset }) {
             {/* Get the initials of the driver's name. */}
             {driver.name.split(' ').map(n => n[0]).join('')}
           </div>
+
           <div>
             <p className="font-medium text-gray-900">{driver.name}</p>
             <p className="text-sm text-gray-500">⭐ {driver.rating} · {driver.car}</p>
           </div>
+
           {/* Number plate badge */}
           <span className="ml-auto text-sm font-mono bg-gray-100 text-gray-700 px-3 py-1 rounded-lg">
             {driver.plate}
@@ -115,14 +119,17 @@ export default function BookingPage({ ride, routeData, onReset }) {
             <span className="text-gray-400">From</span>
             <span>{routeData.pickup}</span> {/* Show pickup location */}
           </div>
+
           <div className="flex justify-between">
             <span className="text-gray-400">To</span>
             <span>{routeData.dropoff}</span> {/* Show dropoff location */}
           </div>
+
           <div className="flex justify-between">
             <span className="text-gray-400">Fare estimate</span>
             <span className="font-semibold text-gray-900">KES {ride.fare}</span>
           </div>
+          
           <div className="flex justify-between">
             <span className="text-gray-400">Ride type</span>
             <span>{ride.type}</span>

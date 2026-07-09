@@ -69,6 +69,7 @@ export default function App() {
             <span className="text-base font-black tracking-tight text-slate-950 sm:text-lg">RideCompare</span>
           </div>
 
+{/* Conditional button: "Get Started" on landing, "New search" on other screens */}
           {screen === 'landing' ? (
             <button
               onClick={handleStart}

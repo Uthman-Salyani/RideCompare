@@ -77,8 +77,8 @@ export default function RouteMap({ pickupCoords, dropoffCoords, pickupLabel, dro
           center={[centerLat, centerLng]}
           zoom={13}
           style={{ height: '100%', width: '100%' }}
-          zoomControl={false}
-          scrollWheelZoom={false}
+          zoomControl={true} /* Disable the default zoom control UI */  
+          scrollWheelZoom={true} /* Disable zooming with the mouse wheel */
         >
           {/* Free OpenStreetMap tiles — no API key needed */}
           <TileLayer
